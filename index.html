@@ -98,13 +98,30 @@
       border-radius: 10px;
       min-height: 150px;
       color: #555;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .product-links {
+      margin-top: 20px;
+      font-weight: normal;
+      font-size: 0.95rem;
+    }
+
+    .product-links a {
+      display: block;
+      margin-bottom: 8px;
+      color: #0073e6;
+      text-decoration: none;
+    }
+
+    .product-links a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -140,9 +157,27 @@
     const suggestionsBox = document.getElementById("product-suggestions");
 
     const suggestions = {
-      mild: "Try a gentle cleanser and daily moisturizer.",
-      moderate: "Consider salicylic acid or benzoyl peroxide treatments.",
-      severe: "Consult a dermatologist for prescription solutions."
+      mild: {
+        text: "Try a gentle cleanser and daily moisturizer.",
+        links: [
+          "https://www.amazon.com/Differin-Adapalene-0-1-Acne-Treatment/dp/B07L1PHSY9/",
+          "https://www.amazon.com/CeraVe-Salicylic-Treatment-Glycolic-Breakouts/dp/B097WMCYYJ/"
+        ]
+      },
+      moderate: {
+        text: "Consider salicylic acid or benzoyl peroxide treatments.",
+        links: [
+          "https://www.amazon.com/Proactiv-3-Step-Treatment-System-Starter/dp/B00X6ZNWG0/",
+          "https://www.amazon.com/acne-moisturizer-cream-for-face/dp/B07D5GQ7RD/"
+        ]
+      },
+      severe: {
+        text: "Consult a dermatologist for prescription solutions.",
+        links: [
+          "https://www.amazon.com/AcneFree-Step-Hour-Acne-Treatment/dp/B00BEUAZTG/",
+          "https://www.amazon.com/AcneFree-Terminator-Treatment-Peroxide-Strength/dp/B0014VTOAQ/"
+        ]
+      }
     };
 
     uploadButton.addEventListener("click", () => {
@@ -164,13 +199,24 @@
       if (conditionText.includes("some") || conditionText.includes("a few")) {
         classification = "moderate";
       }
-      if (conditionText.includes("a lot") || conditionText.includes("severe") || conditionText.includes("bad") || conditionText.includes("very")) {
+      if (
+        conditionText.includes("a lot") ||
+        conditionText.includes("very") ||
+        conditionText.includes("bad") ||
+        conditionText.includes("severe")
+      ) {
         classification = "severe";
       }
 
+      const result = suggestions[classification];
+
       suggestionsBox.innerHTML = `
         <div>Classification: <span style="color: black;">${classification.toUpperCase()}</span></div>
-        <p style="margin-top: 15px;">${suggestions[classification]}</p>
+        <p style="margin-top: 15px;">${result.text}</p>
+        <div class="product-links">
+          <strong>Here are some Amazon products:</strong>
+          ${result.links.map(link => `<a href="${link}" target="_blank">${link}</a>`).join("")}
+        </div>
       `;
     });
   </script>
